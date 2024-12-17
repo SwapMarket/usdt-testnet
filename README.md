@@ -1,1 +1,1 @@
-Testnet deployment of [SwapMarket](https://github.com/SwapMarket/swapmarket.github.io).
+Testnet deployment of [Liquid BTC/USDt](https://github.com/SwapMarket/usdt).
