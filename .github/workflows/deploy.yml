@@ -31,7 +31,7 @@ jobs:
       - name: Checkout 'test' branch of Main Repository
         uses: actions/checkout@v4
         with:
-          repository: SwapMarket/swapmarket.github.io
+          repository: SwapMarket/usdt
           ref: test
 
       - name: Set up Node
@@ -45,30 +45,22 @@ jobs:
 
       - name: Update vite.config.mjs
         run: |
-          sed -i 's|base: "/",*$|base: "/testnet/",|g' vite.config.mjs
-
-      - name: Update index.tsx
-        run: |
-          sed -i 's|base = "/";|base = "/testnet/";|g' src/index.tsx
+          sed -i 's|base: "/usdt/",*$|base: "/usdt-testnet/",|g' vite.config.mjs
 
       - name: Copy config
         run: npm run testnet
 
+      - name: Install Go
+        run: wget https://go.dev/dl/go1.21.3.linux-amd64.tar.gz && sudo tar -C /usr/local -xzf go1.21.3.linux-amd64.tar.gz
+        
       - name: Build
+        env:
+          PRIV_KEY: ${{ secrets.PRIV_KEY }}
+          PUB_KEY: ${{ secrets.PUB_KEY }}
         run: npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
-
-      - name: Attest build provenance
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: '${{ github.workspace }}/dist'
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
